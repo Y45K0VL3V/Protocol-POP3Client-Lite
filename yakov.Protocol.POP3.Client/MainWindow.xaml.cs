@@ -23,6 +23,7 @@ namespace yakov.Protocol.POP3.Client
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainVM();
         }
     }
 }

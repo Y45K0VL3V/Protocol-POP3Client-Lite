@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using yakov.Protocol.POP3.Client.Model;
 
 namespace yakov.Protocol.POP3.Client
 {
@@ -98,6 +99,32 @@ namespace yakov.Protocol.POP3.Client
 
         #endregion
 
+        private RelayCommand _tryConnect;
+        public RelayCommand TryConnect
+        {
+            get
+            {
+                return _sendCommand ??
+                  (_sendCommand = new RelayCommand(obj =>
+                  {
+
+                  }));
+            }
+        }
+
+        private RelayCommand _sendCommand;
+        public RelayCommand SendCommand
+        {
+            get
+            {
+                return _sendCommand ??
+                  (_sendCommand = new RelayCommand(obj =>
+                  {
+                      
+                  }));
+            }
+        }
+
         private List<string> _activityHistory = new List<string>();
         public List<string> ActivityHistory
         {
@@ -111,6 +138,8 @@ namespace yakov.Protocol.POP3.Client
                 OnPropertyChanged("ActivityCommand");
             }
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")

@@ -35,7 +35,7 @@
                          Text="{Binding Port, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          materialDesign:ValidationAssist.Background="Transparent" materialDesign:ValidationAssist.FontSize="9"/>
                 <Button Grid.Column="2" Margin="10" Style="{StaticResource MaterialDesignFlatDarkBgButton}"
-                        IsEnabled="{Binding IsDataCorrect}">
+                        IsEnabled="{Binding IsDataCorrect}" Command="{Binding TryConnect}">
                     Connect
                 </Button>
             </Grid>
@@ -53,7 +53,8 @@
                          materialDesign:HintAssist.FloatingScale="0"
                          Text="{Binding InputCommand}"/>
                 
-                <Button Grid.Column="1" Margin="10" Style="{StaticResource MaterialDesignFlatDarkBgButton}" IsEnabled="{Binding IsClientConnected}">
+                <Button Grid.Column="1" Margin="10" Style="{StaticResource MaterialDesignFlatDarkBgButton}" IsEnabled="{Binding IsClientConnected}"
+                        Command="{Binding SendCommand}">
                     Send
                 </Button>
             </Grid>

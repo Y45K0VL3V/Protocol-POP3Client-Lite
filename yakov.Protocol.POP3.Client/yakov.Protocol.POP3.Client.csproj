@@ -78,6 +78,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\InteractionControl.cs" />
+    <Compile Include="Model\POP3Client.cs" />
+    <Compile Include="Model\RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

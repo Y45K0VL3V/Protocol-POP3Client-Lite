@@ -104,10 +104,21 @@ namespace yakov.Protocol.POP3.Client
         {
             get
             {
-                return _sendCommand ??
-                  (_sendCommand = new RelayCommand(obj =>
+                return _tryConnect ??
+                  (_tryConnect = new RelayCommand(obj =>
                   {
-
+                      ActivityHistory.Add($"Connecting to {Host}:{Port}");
+                      string answer = InteractionControl.ClientConnect(Host, (int)_port);
+                      if (answer != null)
+                      {
+                          IsClientConnected = true;
+                          ActivityHistory.Add(answer);
+                      }
+                      else
+                      {
+                          ActivityHistory.Add($"Connection error.");
+                          IsClientConnected = false;
+                      }
                   }));
             }
         }

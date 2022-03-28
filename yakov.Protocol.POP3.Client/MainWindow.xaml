@@ -63,7 +63,7 @@
         <materialDesign:Card Margin="15" Grid.Row="2">
             <Grid>
                 <ListView Margin="10" Style="{StaticResource MaterialDesignListView}"
-                          ItemsSource="{Binding ActivityHistory}">
+                          ItemsSource="{Binding ActivityHistory, UpdateSourceTrigger=PropertyChanged}">
                 </ListView>
             </Grid>
         </materialDesign:Card>

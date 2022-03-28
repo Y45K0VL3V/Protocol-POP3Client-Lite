@@ -8,6 +8,23 @@ namespace yakov.Protocol.POP3.Client.Model
 {
     public static class InteractionControl
     {
+        private static POP3Client _pop3Client;
+        static InteractionControl()
+        {
+            _pop3Client = POP3Client.GetInstance();
+        }
+        public static string ClientConnect(string host, int port)
+        {
+            if (_pop3Client.Connect(host, port))
+                return _pop3Client.Receive();
+            else
+                return null;
+        }
 
+        public static string Execute(string command)
+        {
+            _pop3Client.Send(command);
+            return _pop3Client.Receive();
+        }
     }
 }

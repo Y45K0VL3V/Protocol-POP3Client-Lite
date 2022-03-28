@@ -52,14 +52,25 @@ namespace yakov.Protocol.POP3.Client.Model
         {
             var serverAnswer = new StringBuilder();
             byte[] buffer = new byte[1024];
-            int bytes;
+            int bytes = default;
             do
             {
-                bytes = _sslStream.Read(buffer, 0, buffer.Length);
-                serverAnswer.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
+                try 
+                {
+                    bytes = _sslStream.Read(buffer, 0, buffer.Length);
+                    serverAnswer.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
+                }
+                catch
+                {
+                    break;
+                }
+                finally
+                {
+                    _sslStream.Flush();
+                }
             } while (bytes > 0);
             
-            return serverAnswer.ToString();
+            return serverAnswer.ToString() ?? "";
         }
     }
 }

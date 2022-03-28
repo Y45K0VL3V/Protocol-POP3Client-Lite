@@ -25,22 +25,46 @@ namespace yakov.Protocol.POP3.Client
             }
             set
             {
+
                 _host = value;
                 OnPropertyChanged("Host");
             }
         }
 
-        private string _port;
+        private int? _port;
         public string Port
         {
             get
             {
-                return _port;
+                return _port.ToString();
             }
             set
             {
-                _port = value;
+                try
+                {
+                    _port = int.Parse(value);
+                    IsDataCorrect = true;
+                }
+                catch
+                {
+                    IsDataCorrect = false;
+                    throw new ArgumentException("Invalid port.");
+                }
                 OnPropertyChanged("Port");
+            }
+        }
+
+        private bool _isDataCorrect = false;
+        public bool IsDataCorrect
+        {
+            get
+            {
+                return _isDataCorrect;
+            }
+            set
+            {
+                _isDataCorrect = value;
+                OnPropertyChanged("IsDataCorrect");
             }
         }
 

@@ -94,6 +94,9 @@ namespace yakov.Protocol.POP3.Client
             set
             {
                 _inputCommand = value;
+                if (!InteractionControl.IsCommandAvaliable(value) && value != null)
+                    throw new ArgumentException("Invalid port.");
+
                 OnPropertyChanged("InputCommand");
             }
         }
@@ -135,7 +138,7 @@ namespace yakov.Protocol.POP3.Client
                 return _sendCommand ??
                   (_sendCommand = new RelayCommand(obj =>
                   {
-                      if (String.IsNullOrEmpty(InputCommand))
+                      if (string.IsNullOrEmpty(InputCommand))
                           return;
 
                       ActivityHistory.Add($"Client: {InputCommand}");
@@ -147,7 +150,8 @@ namespace yakov.Protocol.POP3.Client
                       }
                       else
                       {
-                          ActivityHistory.Add($"Error occured");
+                          ActivityHistory.Add($"Error occured. You disconnected");
+                          IsClientConnected=false;
                       }
                   }));
             }
@@ -170,8 +174,7 @@ namespace yakov.Protocol.POP3.Client
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

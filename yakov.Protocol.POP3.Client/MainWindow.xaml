@@ -51,7 +51,8 @@
                 <TextBox Grid.Column="0" Margin="10,15" Padding="15,0" Style="{StaticResource MaterialDesignOutlinedTextBox}"
                          materialDesign:HintAssist.Hint="Command" VerticalContentAlignment="Center"
                          materialDesign:HintAssist.FloatingScale="0"
-                         Text="{Binding InputCommand}"/>
+                         materialDesign:ValidationAssist.Background="Transparent"
+                         Text="{Binding InputCommand, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 
                 <Button Grid.Column="1" Margin="10" Style="{StaticResource MaterialDesignFlatDarkBgButton}" IsEnabled="{Binding IsClientConnected}"
                         Command="{Binding SendCommand}">

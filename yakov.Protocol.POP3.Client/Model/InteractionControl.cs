@@ -8,7 +8,7 @@ namespace yakov.Protocol.POP3.Client.Model
 {
     public static class InteractionControl
     {
-        private static POP3Client _pop3Client;
+        private static readonly POP3Client _pop3Client;
         static InteractionControl()
         {
             _pop3Client = POP3Client.GetInstance();
@@ -24,8 +24,12 @@ namespace yakov.Protocol.POP3.Client.Model
         public static string Execute(string command)
         {
             _pop3Client.Send(command);
-            return _pop3Client.Receive().Substring(5);
+            return _pop3Client.Receive().Substring(command.Length > 5 ? 5 : 0);
         }
 
+        public static bool IsCommandAvaliable(string command)
+        {
+            return POP3Client.Pop3Commands.Contains(command?.Split(new char[] { ' ' })[0].ToLower()) ? true : false;
+        }
     }
 }

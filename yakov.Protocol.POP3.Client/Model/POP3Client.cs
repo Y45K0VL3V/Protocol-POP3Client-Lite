@@ -10,6 +10,18 @@ namespace yakov.Protocol.POP3.Client.Model
 {
     public class POP3Client
     {
+        public static string[] Pop3Commands = new string[]
+        {
+            "user",
+            "pass",
+            "stat",
+            "list",
+            "rert",
+            "top",
+            "dele",
+            "quit"
+        };
+
         const int ReadTimeOut = 1000;
 
         private static POP3Client s_client;

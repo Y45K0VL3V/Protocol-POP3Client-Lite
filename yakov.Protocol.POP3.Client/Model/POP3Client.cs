@@ -75,7 +75,8 @@ namespace yakov.Protocol.POP3.Client.Model
                 {
                     _sslStream.Flush();
                     bytes = _sslStream.Read(buffer, 0, buffer.Length);
-                    serverAnswer.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
+                    if (bytes != 5)
+                        serverAnswer.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
                 }
                 catch
                 {

@@ -18,7 +18,7 @@ namespace yakov.Protocol.POP3.Client
 
         #region Binding properties. Input.
 
-        private string _host = "pop.gmail.com";
+        private string _host;
         public string Host
         {
             get
@@ -33,7 +33,7 @@ namespace yakov.Protocol.POP3.Client
             }
         }
 
-        private int? _port = 995;
+        private int? _port;
         public string Port
         {
             get
@@ -95,7 +95,7 @@ namespace yakov.Protocol.POP3.Client
             {
                 _inputCommand = value;
                 if (!InteractionControl.IsCommandAvaliable(value) && value != null)
-                    throw new ArgumentException("Invalid port.");
+                    throw new ArgumentException("Invalid command.");
 
                 OnPropertyChanged("InputCommand");
             }
@@ -138,12 +138,11 @@ namespace yakov.Protocol.POP3.Client
                 return _sendCommand ??
                   (_sendCommand = new RelayCommand(obj =>
                   {
-                      if (string.IsNullOrEmpty(InputCommand))
+                      if (string.IsNullOrEmpty(InputCommand) || !InteractionControl.IsCommandAvaliable(InputCommand))
                           return;
 
                       ActivityHistory.Add($"Client: {InputCommand}");
                       string answer = InteractionControl.Execute(InputCommand);
-                      InputCommand = null;
                       if (answer != "")
                       { 
                           ActivityHistory.Add($"Server: {answer}");
@@ -153,6 +152,10 @@ namespace yakov.Protocol.POP3.Client
                           ActivityHistory.Add($"Error occured. You disconnected");
                           IsClientConnected=false;
                       }
+
+                      if (InputCommand.StartsWith("quit", StringComparison.CurrentCultureIgnoreCase))
+                          IsClientConnected = false;
+                      InputCommand = null;
                   }));
             }
         }

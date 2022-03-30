@@ -15,10 +15,11 @@ namespace yakov.Protocol.POP3.Client.Model
         private static POP3Client s_client;
         private TcpClient _tcpClient;
         private SslStream _sslStream;
+        private bool _isClosing = false;
 
         private POP3Client()
         {
-            _tcpClient = new TcpClient();
+            
         }
 
         public static POP3Client GetInstance()
@@ -30,7 +31,7 @@ namespace yakov.Protocol.POP3.Client.Model
         {
             try
             {
-                _tcpClient.Connect(host, port);
+                _tcpClient = new TcpClient(host, port);
                 _sslStream = new SslStream(_tcpClient.GetStream());
                 _sslStream.ReadTimeout = ReadTimeOut;
                 _sslStream.AuthenticateAsClient(host);
@@ -45,7 +46,10 @@ namespace yakov.Protocol.POP3.Client.Model
 
         public void Send(string message)
         {
-            _sslStream.Write(Encoding.ASCII.GetBytes(message));
+            _sslStream.Flush();
+            _sslStream.Write(Encoding.ASCII.GetBytes(message + "\r\n"));
+            if (String.Equals(message, "quit", StringComparison.CurrentCultureIgnoreCase))
+                _isClosing = true;
         }
 
         public string Receive()
@@ -55,8 +59,9 @@ namespace yakov.Protocol.POP3.Client.Model
             int bytes = default;
             do
             {
-                try 
+                try
                 {
+                    _sslStream.Flush();
                     bytes = _sslStream.Read(buffer, 0, buffer.Length);
                     serverAnswer.Append(Encoding.ASCII.GetString(buffer, 0, bytes));
                 }
@@ -69,7 +74,14 @@ namespace yakov.Protocol.POP3.Client.Model
                     _sslStream.Flush();
                 }
             } while (bytes > 0);
-            
+
+            if (_isClosing)
+            {
+                _tcpClient = null;
+                _sslStream = null;
+                _isClosing = false;
+            }
+
             return serverAnswer.ToString() ?? "";
         }
     }

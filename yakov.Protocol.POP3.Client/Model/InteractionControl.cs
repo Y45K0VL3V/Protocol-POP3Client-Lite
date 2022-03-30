@@ -24,7 +24,8 @@ namespace yakov.Protocol.POP3.Client.Model
         public static string Execute(string command)
         {
             _pop3Client.Send(command);
-            return _pop3Client.Receive();
+            return _pop3Client.Receive().Substring(5);
         }
+
     }
 }

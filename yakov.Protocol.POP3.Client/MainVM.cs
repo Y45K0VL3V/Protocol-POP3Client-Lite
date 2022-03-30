@@ -17,7 +17,7 @@ namespace yakov.Protocol.POP3.Client
 
         #region Binding properties. Input.
 
-        private string _host;
+        private string _host = "pop.gmail.com";
         public string Host
         {
             get
@@ -32,7 +32,7 @@ namespace yakov.Protocol.POP3.Client
             }
         }
 
-        private int? _port;
+        private int? _port = 995;
         public string Port
         {
             get
@@ -107,12 +107,15 @@ namespace yakov.Protocol.POP3.Client
                 return _tryConnect ??
                   (_tryConnect = new RelayCommand(obj =>
                   {
+                      if (IsClientConnected)
+                          ActivityHistory.Add($"Server: {InteractionControl.Execute("QUIT")}");
+
                       ActivityHistory.Add($"Connecting to {Host}:{Port}");
                       string answer = InteractionControl.ClientConnect(Host, (int)_port);
                       if (answer != null)
                       {
                           IsClientConnected = true;
-                          ActivityHistory.Add(answer);
+                          ActivityHistory.Add($"Server: {answer}");
                       }
                       else
                       {
@@ -131,7 +134,20 @@ namespace yakov.Protocol.POP3.Client
                 return _sendCommand ??
                   (_sendCommand = new RelayCommand(obj =>
                   {
-                      
+                      if (String.IsNullOrEmpty(InputCommand))
+                          return;
+
+                      ActivityHistory.Add($"Client: {InputCommand}");
+                      string answer = InteractionControl.Execute(InputCommand);
+                      InputCommand = null;
+                      if (answer != "")
+                      {
+                          ActivityHistory.Add($"Server: {answer}");
+                      }
+                      else
+                      {
+                          ActivityHistory.Add($"Error occured");
+                      }
                   }));
             }
         }

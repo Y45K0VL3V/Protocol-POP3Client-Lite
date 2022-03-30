@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -141,7 +142,7 @@ namespace yakov.Protocol.POP3.Client
                       string answer = InteractionControl.Execute(InputCommand);
                       InputCommand = null;
                       if (answer != "")
-                      {
+                      { 
                           ActivityHistory.Add($"Server: {answer}");
                       }
                       else
@@ -152,8 +153,8 @@ namespace yakov.Protocol.POP3.Client
             }
         }
 
-        private List<string> _activityHistory = new List<string>();
-        public List<string> ActivityHistory
+        private ObservableCollection<string> _activityHistory = new ObservableCollection<string>();
+        public ObservableCollection<string> ActivityHistory
         {
             get
             {
@@ -165,8 +166,6 @@ namespace yakov.Protocol.POP3.Client
                 OnPropertyChanged("ActivityCommand");
             }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")

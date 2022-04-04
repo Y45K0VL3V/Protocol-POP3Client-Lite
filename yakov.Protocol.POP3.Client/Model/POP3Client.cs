@@ -16,10 +16,11 @@ namespace yakov.Protocol.POP3.Client.Model
             "pass",
             "stat",
             "list",
-            "rert",
             "top",
             "dele",
-            "quit"
+            "quit",
+            "rset",
+            "retr"
         };
 
         const int ReadTimeOut = 1000;

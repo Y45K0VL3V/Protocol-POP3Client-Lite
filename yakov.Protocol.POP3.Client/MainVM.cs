@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -144,7 +145,7 @@ namespace yakov.Protocol.POP3.Client
                       ActivityHistory.Add($"Client: {InputCommand}");
                       string answer = InteractionControl.Execute(InputCommand);
                       if (answer != "")
-                      { 
+                      {
                           ActivityHistory.Add($"Server: {answer}");
                       }
                       else
